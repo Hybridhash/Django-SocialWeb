@@ -1,0 +1,14 @@
+<html>
+  <head>
+  </head>
+  <body>
+    <h1>Social Web Application</h1>
+    <table>
+      <tr><th>Protein ID</th><th>Sequence</th></tr>
+        {% for protein in proteins %}
+        <tr><td>{{protein.protein_id}}</td>
+        <td>{{protein.sequence}}</td></tr>
+	    {% endfor %} 
+    </table>
+  </body>
+</html>
