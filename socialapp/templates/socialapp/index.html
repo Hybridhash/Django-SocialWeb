@@ -1,0 +1,35 @@
+
+{% extends "./base.html" %}
+
+
+{% block title %}
+    Landing Page
+{% endblock title %}
+
+{% block main %}
+
+    <div class="flex flex-col min-h-screen justify-center items-center ">
+
+            <h1>Social Web Application</h1>
+   
+            <table>
+            <tr><th>Protein ID</th><th>Sequence</th></tr>
+                {% for profile in profiles  %}
+                <tr><td>{{profile.user}}</td>
+                <td>{{profile.country}}</td></tr>
+                {% endfor %} 
+            </table>
+            
+            <label class="label">
+                <span class="label-text">Username</span>
+              </label>
+            <input type="username" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+            <label class="label">
+                <span class="label-text">Password</span>
+              </label>
+            <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
+            <div class = "pt-5">
+                <button class="btn">Submit</button>
+            </div>
+    </div>
+{% endblock main %}

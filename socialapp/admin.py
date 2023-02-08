@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User, Group
-from models import Profile
+from socialapp.models import Profile
 
 # Un registering the groups as it is not required in the social web application
 admin.site.unregister(Group)

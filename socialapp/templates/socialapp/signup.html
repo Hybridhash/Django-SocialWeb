@@ -1,0 +1,21 @@
+
+{% extends "./base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block title %}
+    Login Page
+{% endblock title %}
+
+{% block main %}
+    <div class="flex flex-col min-h-screen justify-center items-center ">
+
+        <!-- <form method="post"> -->
+            {% csrf_token %}
+      
+            {% crispy form %}
+      
+            <!-- <button type="submit" class="btn"  value="Submit">Submit</button> -->
+        <!-- </form> -->
+    </div>
+{% endblock main %}
