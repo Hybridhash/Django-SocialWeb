@@ -8,5 +8,7 @@
 {% block main %}
     <div class="flex flex-col min-h-screen justify-center items-center ">
         <h1>Welcome to Home</h1>
+        <h1>Welcome, {{request.user}}</h1><br>
+        <a href="{% url 'logout'%}">Logout</a>
     </div>
 {% endblock main %}

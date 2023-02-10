@@ -1,15 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en" data-theme="autumn">
+<html lang="en">
 <html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=devide-width, initial-scale=1.0" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@2.6.0/dist/full.css"
-      rel="stylesheet"
-      type="text/css"
-    />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <title>
@@ -22,5 +19,12 @@
         {%  block main %}
         {%  endblock main %}
     </main>
+
+    <script>
+      document.body.addEventListener('htmx:configRequest', (event) => {
+          event.detail.headers['X-CSRF-Token'] = '{{ csrf_token }}';
+      })
+    </script>
+
   </body>
 </html>

@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-n0-9omo6uqt3zdo&n(_6uk^155l+iu37^1@fa$_s17o9&*+%ld
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ '127.0.0.1' ]
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # Application definition
@@ -37,33 +37,25 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'django_browser_reload',
-    
-    #Crispy Forms
-    'crispy_forms',
-    'crispy_tailwind',
-    
+    "django_browser_reload",
+    # Crispy Forms
+    "crispy_forms",
+    "crispy_tailwind",
     # Django Extension:
-    'django_extensions',
-
-    #Rest Framwork
-    'rest_framework',
-
-    #Social App within Social web project
+    "django_extensions",
+    # Rest Framwork
+    "rest_framework",
+    # Social App within Social web project
     "socialapp",
-
-    #Django Countries for model
-    "django_countries"
-
-
+    # Django Countries for model
+    "django_countries",
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny",
     ],
-    "DEFAULT_PAGINATION_CLASS":
-    "rest_framework.pagination.LimitOffsetPagination",
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 50,
 }
 
@@ -76,7 +68,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'django_browser_reload.middleware.BrowserReloadMiddleware',
+    "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = "socialweb.urls"
@@ -158,3 +150,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
 
 CRISPY_TEMPLATE_PACK = "tailwind"
+
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = "/home"

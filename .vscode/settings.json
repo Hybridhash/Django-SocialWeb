@@ -2,5 +2,8 @@
     "cSpell.words": [
         "socialapp",
         "socialweb"
-    ]
+    ],
+    "editor.formatOnSave": true,
+    "python.formatting.provider": "black"
+
 }
