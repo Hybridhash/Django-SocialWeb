@@ -24,7 +24,7 @@ class UserSignupForm(forms.ModelForm):
             # To replace/swap the form with the information returned by django
             "hx-target": "#signup-form",
             # Ajax swap to replace the outer HTML (Avoiding placing html inside the target - form inside form)
-            "hx-swap": "outerHTML",
+            "hx-swap": "innerHTML",
         }
         self.helper.add_input(
             Submit(

@@ -35,10 +35,10 @@ def user_signup(request):
             user = form.save()
             # Session for user from django
             # login(request, user)
-            template = render(request, "socialapp/home.html")
-            template["HX-Push"] = "/home/"
-            return template
-
+            # template = render(request, "socialapp/login.html")
+            # template["HX-Push"] = "/login/"
+            # return template
+            return redirect("/login")
         # Validate a crispy-form through AJAX to re-render any resulting form errors
         ctx = {}
         ctx.update(csrf(request))
