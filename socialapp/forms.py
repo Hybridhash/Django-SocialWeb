@@ -117,3 +117,47 @@ class UserLoginForm(forms.Form):
                 raise forms.ValidationError("Invalid username or password")
 
         return super(UserLoginForm, self).clean(*args, **kwargs)
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email"]
+
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ["country", "birthdate", "image"]
+
+    def __init__(self, user, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = user
+
+    def clean(self):
+        cleaned_data = super().clean()
+        try:
+            user = User.objects.get(user=self.user)
+        except User.DoesNotExist:
+            raise forms.ValidationError("User with this username does not exist.")
+        self.instance = user
+        return cleaned_data
+
+
+class UserProfileCombinedForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ["first_name", "last_name", "email"]
+
+    def __init__(self, username, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.username = username
+
+    def clean(self):
+        cleaned_data = super().clean()
+        try:
+            user = User.objects.get(username=self.username)
+        except User.DoesNotExist:
+            raise forms.ValidationError("User with this username does not exist.")
+        self.instance = user
+        return cleaned_data

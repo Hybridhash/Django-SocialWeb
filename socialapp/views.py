@@ -1,5 +1,10 @@
 from django.shortcuts import render, redirect
-from socialapp.forms import UserSignupForm, UserLoginForm
+from socialapp.forms import (
+    UserSignupForm,
+    UserLoginForm,
+    UserProfileCombinedForm,
+    UserProfileForm,
+)
 from django.http import HttpResponse
 from django.template.context_processors import csrf
 
@@ -80,3 +85,51 @@ def homepage(request):
 def user_logout(request):
     logout(request)
     return redirect("/login")
+
+
+def user_profile_edit(request, username):
+    # if request.method == "GET":
+    #     context = {
+    #         "profile_form_a": UserProfileAForm,
+    #         "profile_form_b": UserProfileBForm,
+    #     }
+    #     return render(request, "socialapp/profile.html", context)
+
+    # elif request.method == "POST":
+    #     form = UserProfileCombinedForm(request.POST)
+    #     if form.is_valid():
+    #         form_a = form.cleaned_data["profile_a"]
+    #         form_a.save()
+    #         form_b = form.cleaned_data["profile_b"]
+    #         form_b.save()
+    #         return redirect("success_url")
+    # user = User.objects.get(username=username)
+    # if request.method == "POST":
+    #     form = UserProfileCombinedForm(username, request.POST, instance=user)
+    #     if form.is_valid():
+    #         form.save()
+    #         # do something with the updated user
+    #         ...
+    # else:
+    #     form = UserProfileCombinedForm(username, instance=user)
+    # return render(request, "socialapp/profile.html", {"profile_form_a": form})
+    # # return render(request, "socialapp/profile.html", {"username": username})
+
+    user = User.objects.get(username=username)
+    if request.method == "POST":
+        form = UserProfileForm(username, request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            # do something with the updated user
+            ...
+    else:
+        form = UserProfileForm(username, instance=user)
+    return render(request, "socialapp/profile.html", {"profile_form_a": form})
+
+
+@login_required(login_url="login/")
+def user_profile(request, username):
+    user = User.objects.get(username=username)
+    results = Profile.objects.get(user__username=user)
+    logging.debug(results)
+    return render(request, "socialapp/profile.html", {"results": results})
