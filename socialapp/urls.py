@@ -11,4 +11,14 @@ urlpatterns = [
     path("home/", views.homepage, name="home"),
     path("login/", views.user_login, name="login"),
     path("profile/<str:username>/", views.user_profile, name="profile"),
+    path(
+        "profile_update/",
+        views.user_profile_edit.as_view(),
+        name="profile_update",
+    ),
+    path(
+        "profile_create/",
+        views.user_profile_create.as_view(),
+        name="profile_create",
+    ),
 ]

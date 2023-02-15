@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit
 from django.contrib.auth import authenticate
+import datetime
 
 
 class UserSignupForm(forms.ModelForm):
@@ -119,45 +120,63 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm, self).clean(*args, **kwargs)
 
 
-class UserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ["first_name", "last_name", "email"]
+# class UserBaseForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ["first_name", "last_name", "email"]
 
 
 class UserProfileForm(forms.ModelForm):
+    birthdate = forms.DateField(widget=forms.TextInput(attrs={"type": "date"}))
+    image = forms.ImageField()
+    """
+    Function to validate birth date is on/before today date    
+    """
+
+    def clean_birthdate(self):
+        birthdate = self.cleaned_data["birthdate"]
+        if birthdate >= datetime.date.today():
+            raise forms.ValidationError("Please enter date before today's date")
+        return birthdate
+
     class Meta:
         model = Profile
         fields = ["country", "birthdate", "image"]
 
-    def __init__(self, user, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.user = user
 
-    def clean(self):
-        cleaned_data = super().clean()
-        try:
-            user = User.objects.get(user=self.user)
-        except User.DoesNotExist:
-            raise forms.ValidationError("User with this username does not exist.")
-        self.instance = user
-        return cleaned_data
+# class UserProfileForm(forms.ModelForm):
+#     class Meta:
+#         model = Profile
+#         fields = ["country", "birthdate", "image"]
+
+#     def __init__(self, user, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.user = user
+
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         try:
+#             user = User.objects.get(user=self.user)
+#         except User.DoesNotExist:
+#             raise forms.ValidationError("User with this username does not exist.")
+#         self.instance = user
+#         return cleaned_data
 
 
-class UserProfileCombinedForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ["first_name", "last_name", "email"]
+# class UserProfileCombinedForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = ["first_name", "last_name", "email"]
 
-    def __init__(self, username, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.username = username
+#     def __init__(self, username, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.username = username
 
-    def clean(self):
-        cleaned_data = super().clean()
-        try:
-            user = User.objects.get(username=self.username)
-        except User.DoesNotExist:
-            raise forms.ValidationError("User with this username does not exist.")
-        self.instance = user
-        return cleaned_data
+#     def clean(self):
+#         cleaned_data = super().clean()
+#         try:
+#             user = User.objects.get(username=self.username)
+#         except User.DoesNotExist:
+#             raise forms.ValidationError("User with this username does not exist.")
+#         self.instance = user
+#         return cleaned_data

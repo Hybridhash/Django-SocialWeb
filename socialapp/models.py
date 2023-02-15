@@ -21,7 +21,9 @@ class Profile(models.Model):
     birthdate = models.DateField(
         null=False, blank=False, validators=[MaxValueValidator(limit_value=date.today)]
     )
-    image = models.ImageField(upload_to="images/", null=False)
+    image = models.ImageField(
+        upload_to="images/", null=True, default="images/undraw_cabin.jpg"
+    )
     # It allows to follow someone only without following back
     friends = models.ManyToManyField(
         "self", related_name="followed_by", symmetrical=False, blank=True

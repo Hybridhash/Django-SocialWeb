@@ -1,4 +1,4 @@
-{% extends "./base.html" %}
+{% extends "./base_auth.html" %}
 
 {% load crispy_forms_tags %}
 
@@ -12,7 +12,6 @@
 
 {% block main %}
 
-{% include "./partials/sidebar.html" %}   
 
 <!-- <div class="profile-view" data-user="{{username.username}}">
     <form method="post">
@@ -22,7 +21,7 @@
         {{ profile_form_b|crispy }}
     </form>
 </div> -->
-
+<!-- 
  <div class="p-4 sm:ml-64">
         <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
            <div class="grid grid-cols-3 gap-4 mb-4">
@@ -74,9 +73,22 @@
      </div>
 
      <div class="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
+        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700"> -->
 
 <div class="flex flex-col min-h-screen pt-6 items-center bg-zinc-100">
+    <!-- {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} -->
+
+    {% if error_message %}
+
+    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+        {{ error_message|safe }}
+    </div>
+    <a href="{% url 'profile_create'%}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+        <span class="flex-1 ml-3 whitespace-nowrap">Profile</span>
+     </a>
+    
+    {% else %}
     <!-- Content here -->
     {{ profile_form_a|crispy }}
     {{username}}
@@ -88,8 +100,18 @@
     <p class="text-3xl font-bold text-gray-900 dark:text-white">Username: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.user}}</span> </p>
     <p class="text-3xl font-bold text-gray-900 dark:text-white">Birthdate: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.birthdate}}</span> </p>
     <p class="text-3xl font-bold text-gray-900 dark:text-white">Country: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.country.name}}</span> </p>
+    
+    
+
+    {% endif %}
 
     </div>
+    
+    
+    <a href="{% url 'profile_update'%}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+        <span class="flex-1 ml-3 whitespace-nowrap">Profile Update</span>
+     </a>
 
 </div>
 

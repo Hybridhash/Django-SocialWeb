@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from socialapp.forms import (
     UserSignupForm,
     UserLoginForm,
-    UserProfileCombinedForm,
     UserProfileForm,
 )
+from django.views.generic.edit import UpdateView, CreateView
 from django.http import HttpResponse
 from django.template.context_processors import csrf
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # This will let us get the HTML fragments from the back end
 from crispy_forms.utils import render_crispy_form
@@ -15,6 +17,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 import logging
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 # Taking all the models from application
 from .models import *
@@ -87,7 +90,7 @@ def user_logout(request):
     return redirect("/login")
 
 
-def user_profile_edit(request, username):
+class user_profile_edit(UpdateView):
     # if request.method == "GET":
     #     context = {
     #         "profile_form_a": UserProfileAForm,
@@ -115,21 +118,65 @@ def user_profile_edit(request, username):
     # return render(request, "socialapp/profile.html", {"profile_form_a": form})
     # # return render(request, "socialapp/profile.html", {"username": username})
 
-    user = User.objects.get(username=username)
-    if request.method == "POST":
-        form = UserProfileForm(username, request.POST, instance=user)
-        if form.is_valid():
-            form.save()
-            # do something with the updated user
-            ...
-    else:
-        form = UserProfileForm(username, instance=user)
-    return render(request, "socialapp/profile.html", {"profile_form_a": form})
+    # user = User.objects.get(username=username)
+    # if request.method == "POST":
+    #     form = UserProfileForm(username, request.POST, instance=user)
+    #     if form.is_valid():
+    #         form.save()
+    #         # do something with the updated user
+    #         ...
+    # else:
+    #     form = UserProfileForm(username, instance=user)
+    # return render(request, "socialapp/profile.html", {"profile_form_a": form})
+
+    # model1 = Profile
+    # fields = ["country", "birthdate", "image"]
+    form_class = UserProfileForm
+    # model2 = User
+    # form_class = UserBaseForm
+
+    template_name = "socialapp/profile_update.html"
+    success_url = reverse_lazy("home")
+
+    def get_object(self, queryset=None):
+        user = User.objects.get(username=self.request.user.username)
+        # logging.debug(get_object_or_404(Profile, user=user))
+        profile = get_object_or_404(Profile, user=user)
+        return Profile.objects.get(user=user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["profile_form"] = self.get_form()
+        logging.debug(context)
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.image = self.request.FILES.get("image")
+        return super().form_valid(form)
 
 
 @login_required(login_url="login/")
 def user_profile(request, username):
-    user = User.objects.get(username=username)
-    results = Profile.objects.get(user__username=user)
-    logging.debug(results)
-    return render(request, "socialapp/profile.html", {"results": results})
+    try:
+        user = User.objects.get(username=username)
+        results = get_object_or_404(Profile, user__username=user)
+        logging.debug(results)
+        return render(request, "socialapp/profile.html", {"results": results})
+    except Http404:
+        url = reverse_lazy("profile_create")
+        message = "Profile not found. Click here to create a profile:"
+        return render(request, "socialapp/profile.html", {"error_message": message})
+
+
+class user_profile_create(LoginRequiredMixin, CreateView):
+    form_class = UserProfileForm
+    template_name = "socialapp/profile_create.html"
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.image = self.request.FILES.get("image")
+        return super().form_valid(form)
+
+    logging.debug(form_valid)
