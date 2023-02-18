@@ -31,3 +31,10 @@ class Profile(models.Model):
 
     def __str__(self):
         return str(self.user.username)
+
+
+class Post(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField(max_length=140)
+    image = models.ImageField(upload_to="post_images/", null=True, blank=True)
+    likers = models.ManyToManyField(User, blank=True, related_name="likes")

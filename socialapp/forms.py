@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile
+from .models import Profile, Post
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from crispy_forms.helper import FormHelper
@@ -180,3 +180,17 @@ class UserProfileForm(forms.ModelForm):
 #             raise forms.ValidationError("User with this username does not exist.")
 #         self.instance = user
 #         return cleaned_data
+
+
+class PostForm(forms.ModelForm):
+
+    text = forms.CharField(max_length=140, widget=forms.Textarea(attrs={"rows": 3}))
+    image = forms.ImageField(
+        required=False,
+        error_messages={"invalid": "Image files only"},
+        widget=forms.FileInput,
+    )
+
+    class Meta:
+        model = Post
+        fields = ["text", "image"]

@@ -8,7 +8,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("signup/", views.user_signup, name="signup"),
     path("logout/", views.user_logout, name="logout"),
-    path("home/", views.homepage, name="home"),
+    path("home/", views.Home.as_view(), name="home"),
     path("login/", views.user_login, name="login"),
     path("profile/<str:username>/", views.user_profile, name="profile"),
     path(
@@ -20,5 +20,15 @@ urlpatterns = [
         "profile_create/",
         views.user_profile_create.as_view(),
         name="profile_create",
+    ),
+    path(
+        "post_create/",
+        views.PostCreate.as_view(),
+        name="post_create",
+    ),
+    path(
+        "post_list/",
+        views.PostList.as_view(),
+        name="post_list",
     ),
 ]

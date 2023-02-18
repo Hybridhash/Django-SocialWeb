@@ -1,10 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from socialapp.forms import (
-    UserSignupForm,
-    UserLoginForm,
-    UserProfileForm,
-)
+from socialapp.forms import UserSignupForm, UserLoginForm, UserProfileForm, PostForm
+from django.views import View
 from django.views.generic.edit import UpdateView, CreateView
+from django.views.generic import ListView
 from django.http import HttpResponse
 from django.template.context_processors import csrf
 from django.urls import reverse_lazy
@@ -79,9 +77,27 @@ def user_login(request):
         return render(request, "socialapp/login.html", context)
 
 
-@login_required(login_url="login/")
-def homepage(request):
-    return render(request=request, template_name="socialapp/home.html")
+# @login_required(login_url="login/")
+# def homepage(request):
+#     return render(request=request, template_name="socialapp/home.html")
+
+
+class Home(View):
+    def get(self, request, *args, **kwargs):
+        post_form = PostForm()
+        # post_create = PostCreate.as_view(success_url=reverse_lazy("home"))
+        # return post_create(request, *args, **kwargs)
+        post_list = PostList.as_view()(request)
+
+        return render(
+            request=request,
+            template_name="socialapp/home.html",
+            context={
+                "post_form": post_form,
+                # "post_create_view": post_create,
+                "post_list": post_list.context_data["post_list"],
+            },
+        )
 
 
 @login_required(login_url="login/")
@@ -180,3 +196,32 @@ class user_profile_create(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
     logging.debug(form_valid)
+
+
+class PostCreate(LoginRequiredMixin, CreateView):
+    form_class = PostForm
+    # template_name = "socialapp/post_create.html"
+    success_url = reverse_lazy("home")
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        form.instance.image = self.request.FILES.get("image")
+        return super().form_valid(form)
+
+    logging.debug(form_valid)
+
+
+class PostList(ListView):
+
+    model = Post
+
+    def get_queryset(self):
+        user = User.objects.get(username=self.request.user.username)
+        # logging.debug(get_object_or_404(Profile, user=user))
+        return Post.objects.filter(owner=user)  # [:5] Get 5 books
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post_list"] = self.get_queryset()
+        logging.debug(context)
+        return context
