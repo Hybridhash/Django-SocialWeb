@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from socialapp.forms import UserSignupForm, UserLoginForm, UserProfileForm, PostForm
 from django.views import View
-from django.views.generic.edit import UpdateView, CreateView
+from django.views.generic.edit import UpdateView, CreateView, DeleteView
 from django.views.generic import ListView
 from django.http import HttpResponse
 from django.template.context_processors import csrf
@@ -225,3 +225,51 @@ class PostList(ListView):
         context["post_list"] = self.get_queryset()
         logging.debug(context)
         return context
+
+
+class PostUpdate(UpdateView):
+    model = Post
+    form_class = PostForm
+
+    template_name = "socialapp/post_update.html"
+    success_url = reverse_lazy("home")
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        user = User.objects.get(username=self.request.user.username)
+        # logging.debug(get_object_or_404(Profile, user=user))
+        # profile = get_object_or_404(Profile, user=user)
+        return qs.filter(owner=user, id=self.kwargs["pk"])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["post_update"] = self.get_form()
+        logging.debug(context)
+        return context
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.image = self.request.FILES.get("image")
+        return super().form_valid(form)
+
+
+class PostDelete(DeleteView):
+    model = Post
+    # form_class = PostForm
+
+    template_name = "socialapp/post_delete.html"
+    success_url = reverse_lazy("home")
+
+    # def get_queryset(self):
+    #     qs = super().get_queryset()
+    #     user = User.objects.get(username=self.request.user.username)
+    #     # logging.debug(get_object_or_404(Profile, user=user))
+    #     # profile = get_object_or_404(Profile, user=user)
+    #     return qs.filter(owner=user, id=self.kwargs["pk"])
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Post, pk=self.kwargs["pk"], owner=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Post deleted successfully.")
+        return super().delete(request, *args, **kwargs)

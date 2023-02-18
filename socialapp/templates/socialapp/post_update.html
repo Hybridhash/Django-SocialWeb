@@ -1,0 +1,22 @@
+{% extends "./base_auth.html" %}
+
+{% load crispy_forms_tags %}
+
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+{% block title %}
+    Post Update
+{% endblock title %}
+
+{% block main %}
+
+  <form  hx-target="this" hx-swap="outerHTML" enctype="multipart/form-data" method="post" action="{% url 'post_update' pk=post.pk %}">
+    {% csrf_token %}
+         {{ post_update|crispy }}
+         <!-- {{ profile_form|crispy }} -->
+        <!-- {{ form.as_p }} -->
+        <button  type="submit" value="Save" class="text-white bg-gradient-to-r to-emerald-600 from-sky-400 border border-white rounded-lg font-medium text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none hover:shadow-lg">Save</button>
+  </form>
+
+{% endblock main %}

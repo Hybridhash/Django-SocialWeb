@@ -183,6 +183,19 @@ class UserProfileForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.form_id = "post-form"
+        # Dictionary to add the extra attributes to the crispy form
+        self.helper.attrs = {
+            # Redirecting on the save to signup page again
+            "hx-post": reverse_lazy("home"),
+            # To replace/swap the form with the information returned by django
+            "hx-target": "#post-form",
+            # Ajax swap to replace the outer HTML (Avoiding placing html inside the target - form inside form)
+            "hx-swap": "outerHTML",
+        }
 
     text = forms.CharField(max_length=140, widget=forms.Textarea(attrs={"rows": 3}))
     image = forms.ImageField(
