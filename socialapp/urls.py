@@ -13,12 +13,12 @@ urlpatterns = [
     path("profile/<str:username>/", views.user_profile, name="profile"),
     path(
         "profile_update/",
-        views.user_profile_edit.as_view(),
+        views.UserProfileEdit.as_view(),
         name="profile_update",
     ),
     path(
         "profile_create/",
-        views.user_profile_create.as_view(),
+        views.UserProfileCreate.as_view(),
         name="profile_create",
     ),
     path(

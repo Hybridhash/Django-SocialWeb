@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.template.context_processors import csrf
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
 
 # This will let us get the HTML fragments from the back end
 from crispy_forms.utils import render_crispy_form
@@ -106,7 +107,7 @@ def user_logout(request):
     return redirect("/login")
 
 
-class user_profile_edit(UpdateView):
+class UserProfileEdit(UpdateView):
     # if request.method == "GET":
     #     context = {
     #         "profile_form_a": UserProfileAForm,
@@ -185,7 +186,7 @@ def user_profile(request, username):
         return render(request, "socialapp/profile.html", {"error_message": message})
 
 
-class user_profile_create(LoginRequiredMixin, CreateView):
+class UserProfileCreate(LoginRequiredMixin, CreateView):
     form_class = UserProfileForm
     template_name = "socialapp/profile_create.html"
     success_url = reverse_lazy("home")
@@ -244,7 +245,7 @@ class PostUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["post_update"] = self.get_form()
-        logging.debug(context)
+        # logging.debug(context)
         return context
 
     def form_valid(self, form):
@@ -260,16 +261,26 @@ class PostDelete(DeleteView):
     template_name = "socialapp/post_delete.html"
     success_url = reverse_lazy("home")
 
-    # def get_queryset(self):
-    #     qs = super().get_queryset()
-    #     user = User.objects.get(username=self.request.user.username)
-    #     # logging.debug(get_object_or_404(Profile, user=user))
-    #     # profile = get_object_or_404(Profile, user=user)
-    #     return qs.filter(owner=user, id=self.kwargs["pk"])
-
     def get_object(self, queryset=None):
         return get_object_or_404(Post, pk=self.kwargs["pk"], owner=self.request.user)
 
     def delete(self, request, *args, **kwargs):
         messages.success(request, "Post deleted successfully.")
+        logging.debug(messages.success(request, "Post deleted successfully."))
         return super().delete(request, *args, **kwargs)
+
+
+class UserSearch(ListView):
+    model = User
+    template_name = "user_search.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        if query:
+            return User.objects.filter(
+                Q(username__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(last_name__icontains=query)
+            )
+        else:
+            return User.objects.none()
