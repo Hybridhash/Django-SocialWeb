@@ -23,6 +23,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # Adding social app to read urls.
     path("", include("socialapp.urls")),
+    # Adding friends app to read urls.
+    path("", include("friends.urls")),
+    # To refresh the page on save.
     path("__reload__/", include("django_browser_reload.urls")),
 ]
 

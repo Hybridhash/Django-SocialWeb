@@ -46,10 +46,12 @@ INSTALLED_APPS = [
     "django_extensions",
     # Rest Framwork
     "rest_framework",
-    # Social App within Social web project
-    "socialapp",
     # Django Countries for model
     "django_countries",
+    # Social App within Social web project
+    "socialapp",
+     # Friends App within Social web project
+    "friends",
 ]
 
 REST_FRAMEWORK = {
