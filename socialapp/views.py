@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.template.context_processors import csrf
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+
 
 # This will let us get the HTML fragments from the back end
 from crispy_forms.utils import render_crispy_form
@@ -268,19 +268,3 @@ class PostDelete(DeleteView):
         messages.success(request, "Post deleted successfully.")
         logging.debug(messages.success(request, "Post deleted successfully."))
         return super().delete(request, *args, **kwargs)
-
-
-class UserSearch(ListView):
-    model = User
-    template_name = "user_search.html"
-
-    def get_queryset(self):
-        query = self.request.GET.get("q")
-        if query:
-            return User.objects.filter(
-                Q(username__icontains=query)
-                | Q(first_name__icontains=query)
-                | Q(last_name__icontains=query)
-            )
-        else:
-            return User.objects.none()

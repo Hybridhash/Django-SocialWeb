@@ -3,5 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    path("friend/", views.Friends.as_view(), name="friend"),
+    path("friends/", views.Friends.as_view(), name="friends"),
+    path("friend_add/<int:pk>/", views.FriendCreate.as_view(), name="friend_add"),
 ]

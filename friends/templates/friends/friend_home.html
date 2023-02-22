@@ -8,11 +8,51 @@
 
 {% block main %}
 <div class="p-4 sm:ml-64">    
-    <div class="flex flex-col min-h-screen justify-center items-center ">
-        <h1>Welcome to Friends Home</h1>
-        <h1>Welcome, {{request.user}}</h1><br>
-        <a href="{% url 'logout'%}">Logout</a>
+    <div class="flex flex-col min-h-screen items-center ">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                {% if message.tags == "warning" %}
+                <div class="flex p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                </div>
+                {% else %}
+                <div class="flex p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
 
+        <h1 class="text-gray-900 dark:text-white">Welcome <b class="italic">{{request.user}}</b> to Friends Home</h1>
+        <div>
+            <form method="GET">
+                <label for="friend-search"  class="block mb-2 font-semibold text-md font-medium text-gray-900 dark:text-white">Search Friends</label>
+                <div class="flex w-96">
+                    <input id="friend-search" type="text" name="q" placeholder="Search by username, first name, or last name" class="w-full mb-2 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required>
+                </div>
+                <button type="submit" class="text-white bg-gradient-to-r to-emerald-600 from-sky-400 border border-white rounded-lg font-medium text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none hover:shadow-lg">Search</button>
+            </form>
+        </div>
+        <div class="bg-white p-4 rounded-md shadow-md w-96">
+            <ul class="divide-y divide-gray-200">
+            {% for user in object_list %}
+                <li class="py-2 flex items-center justify-between">
+                <a href="{% url 'profile' user.username %}">
+                    {{ user.username }}
+                    {{ user.pk }}
+                </a>
+                <form action="{% url 'friend_add' pk=user.pk %}" method="POST">
+                    {% csrf_token %}
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-2 rounded-lg">Test Button</button>
+                </form>
+                </li>
+            {% empty %}
+                <li class="py-2 flex items-center justify-between">No users found..</li>
+            {% endfor %}
+            </ul>
+        </div>
     </div>
 </div>
 {% endblock main %}
