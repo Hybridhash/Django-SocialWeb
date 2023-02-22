@@ -50,8 +50,9 @@ INSTALLED_APPS = [
     "django_countries",
     # Social App within Social web project
     "socialapp",
-     # Friends App within Social web project
+    # Friends App within Social web project
     "friends",
+    "django_truncate",
 ]
 
 REST_FRAMEWORK = {

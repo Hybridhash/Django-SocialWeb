@@ -178,6 +178,17 @@ files = [
 Django = ">=3.2"
 
 [[package]]
+name = "django-truncate"
+version = "0.1"
+description = "A simple Django app to help developers truncate specific models."
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "django-truncate-0.1.tar.gz", hash = "sha256:e6b153145ee898c792bc460031727ddc3518bc7594a58c8935dc4d45c46f06b5"},
+]
+
+[[package]]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
@@ -387,4 +398,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "5e6a17b62b6b2d9ff2187b672374b0369bff5cbb0ddbe0f0b7ffb9c4cf113544"
+content-hash = "e220f126b09bd412a9bd3b0582518c876e04b959e666df33db15dd3b93b72098"
