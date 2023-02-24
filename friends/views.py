@@ -27,9 +27,15 @@ class FriendHome(TemplateView):
         friend_requests_received = FriendRequest.objects.filter(
             to_user=self.request.user, accepted=False
         )
-        logging.debug(self.request.user.id)
-        logging.debug(friend_requests_received[0].id)
+
+        # Get the list of friends where request is accepted
+        friends_circle = FriendRequest.objects.filter(
+            from_user=self.request.user, accepted=True
+        ) or FriendRequest.objects.filter(to_user=self.request.user, accepted=True)
+
+        logging.debug(friends_circle)
         context["friend_requests_received"] = friend_requests_received
+        context["friends_circle"] = friends_circle
 
         return context
 
@@ -102,6 +108,31 @@ class FriendCreate(LoginRequiredMixin, CreateView):
                 )
         return redirect(reverse_lazy("friends"))
 
-        # # return redirect("user_detail", pk=to_user.pk)
-        # message = f"Friend request is send to a {to_user.username}"
-        # return redirect(self.request, "friends/friend_home.html", {"message": message})
+
+class FriendAccept(TemplateView):
+    # model = FriendRequest
+    # fields = ["accepted"]
+    # success_url = reverse_lazy("friends")
+
+    # def form_valid(self, form):
+    #     form.is_valid()
+    #     friend_request = get_object_or_404(FriendRequest, pk=self.kwargs["pk"])
+    #     logging.debug(friend_request)
+    #     friend_request.accepted = True
+    #     friend_request.save()
+    #     logging.debug(friend_request.save())
+    #     return super().form_valid(form)
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     friend_request = get_object_or_404(FriendRequest, pk=self.kwargs["pk"])
+    #     context["friend_request"] = friend_request
+    #     return context
+    template_name = "friends/friend_home.html"
+
+    success_url = reverse_lazy("friends")
+
+    def post(self, request, *args, **kwargs):
+        friend_request = get_object_or_404(FriendRequest, pk=self.kwargs["pk"])
+        friend_request.accepted = True
+        friend_request.save()
+        return redirect(reverse_lazy("friends"))

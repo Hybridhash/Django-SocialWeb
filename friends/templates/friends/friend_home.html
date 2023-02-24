@@ -27,14 +27,43 @@
 
         <h1 class="text-gray-900 dark:text-white">Welcome <b class="italic">{{request.user}}</b> to Friends Home</h1>
         <div class = "pt-5">
+            <label for=""  class="block mb-2 font-semibold text-md font-medium text-gray-900 dark:text-white">Friends Circle</label>
+            <div class="bg-white p-4 rounded-md shadow-md w-96">   
+                <ul class="divide-y divide-gray-200">
+                {% for friend in friends_circle %}
+                    <li class="py-2 flex items-center justify-between">
+                            {% if friend.from_user == request.user.id %}
+                            <a class="text-violet-700 font-semibold capitalize" href="{% url 'profile' friend.from_user %}">
+                                {{friend.from_user}}
+                            </a>
+                            {% else %}
+                            <a class="text-violet-700 font-semibold capitalize" href="{% url 'profile' friend.to_user %}">
+                                {{friend.to_user}}
+                            </a>
+                            {% endif %}
+                        
+                            {% csrf_token %}
+                            <button class="w-30 py-1 px-8 bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 rounded-lg">Delete</button>
+                    
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class = "pt-5">
             <label for=""  class="block mb-2 font-semibold text-md font-medium text-gray-900 dark:text-white">Friend Requests Pending</label>
             <div class="bg-white p-4 rounded-md shadow-md w-96">   
                 <ul class="divide-y divide-gray-200">
                 {% for request in friend_requests_received %}
+                    {{request.id }}
                     <li class="py-2 flex items-center justify-between">
                         <a class="text-violet-700 font-semibold capitalize" href="{% url 'profile' request.from_user %}">
                             {{request.from_user}}
                         </a>
+                        <form action="{% url 'friend_accept' pk=request.id %}" method="POST">
+                            {% csrf_token %}
+                            <button class="w-30 py-1 px-7 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg">Accept</button>
+                        </form>
                     </li>
                 {% endfor %}
                 </ul>
@@ -69,11 +98,11 @@
                             <button class="w-30 py-1 px-8 bg-red-500 hover:bg-red-600 text-white font-medium py-1 px-2 rounded-lg">Delete</button>
                         </form>
                     {% elif user.is_pending %}
-                        <p class="text-blue-500 ">Pending Request</p>
-                        <form action="" method="POST">
+                        <p class="text-blue-500 ">Pending Request for acceptance</p>
+                        <!-- <form action="" method="POST">
                             {% csrf_token %}
                             <button class="w-30 py-1 px-8 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg">Accept</button>
-                        </form>
+                        </form> -->
                     {% else %}  
                         <form action="{% url 'friend_add' pk=user.pk %}" method="POST">
                             {% csrf_token %}
