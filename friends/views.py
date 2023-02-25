@@ -31,7 +31,7 @@ class FriendHome(TemplateView):
         # Get the list of friends where request is accepted
         friends_circle = FriendRequest.objects.filter(
             from_user=self.request.user, accepted=True
-        ) or FriendRequest.objects.filter(to_user=self.request.user, accepted=True)
+        ) | FriendRequest.objects.filter(to_user=self.request.user.id, accepted=True)
 
         logging.debug(friends_circle)
         context["friend_requests_received"] = friend_requests_received
@@ -109,7 +109,7 @@ class FriendCreate(LoginRequiredMixin, CreateView):
         return redirect(reverse_lazy("friends"))
 
 
-class FriendAccept(TemplateView):
+class FriendAccept(View):
     # model = FriendRequest
     # fields = ["accepted"]
     # success_url = reverse_lazy("friends")
@@ -129,10 +129,21 @@ class FriendAccept(TemplateView):
     #     return context
     template_name = "friends/friend_home.html"
 
-    success_url = reverse_lazy("friends")
+    # success_url = reverse_lazy("friends")
 
     def post(self, request, *args, **kwargs):
         friend_request = get_object_or_404(FriendRequest, pk=self.kwargs["pk"])
         friend_request.accepted = True
         friend_request.save()
+        messages.success(self.request, "Friend request accepted")
+        return redirect(reverse_lazy("friends"))
+
+
+class FriendDelete(LoginRequiredMixin, View):
+    template_name = "friends/friend_home.html"
+
+    def post(self, request, *args, **kwargs):
+        friend_request = get_object_or_404(FriendRequest, pk=self.kwargs["pk"])
+        friend_request.delete()
+        messages.warning(self.request, "Friend deleted")
         return redirect(reverse_lazy("friends"))
