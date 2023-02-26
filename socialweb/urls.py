@@ -21,10 +21,12 @@ from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    # Adding social app to read urls.
+    # Adding social app  urls.
     path("", include("socialapp.urls")),
-    # Adding friends app to read urls.
+    # Adding friends app urls.
     path("", include("friends.urls")),
+    # Adding chat app urls.
+    path("", include("chat.urls")),
     # To refresh the page on save.
     path("__reload__/", include("django_browser_reload.urls")),
 ]

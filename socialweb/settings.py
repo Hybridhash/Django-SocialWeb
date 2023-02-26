@@ -26,12 +26,14 @@ SECRET_KEY = "django-insecure-n0-9omo6uqt3zdo&n(_6uk^155l+iu37^1@fa$_s17o9&*+%ld
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    # Web server gateway interface for asynchronous web applications.
+    # "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -44,7 +46,7 @@ INSTALLED_APPS = [
     "crispy_tailwind",
     # Django Extension:
     "django_extensions",
-    # Rest Framwork
+    # Rest Framework
     "rest_framework",
     # Django Countries for model
     "django_countries",
@@ -52,7 +54,12 @@ INSTALLED_APPS = [
     "socialapp",
     # Friends App within Social web project
     "friends",
+    # chat App within Social web project
+    "chat",
+    # to clear the data already inserted in tables without destroying structure
     "django_truncate",
+    # for Chat app
+    "channels",
 ]
 
 REST_FRAMEWORK = {
@@ -95,6 +102,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "socialweb.wsgi.application"
 
+ASGI_APPLICATION = "socialweb.routing.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -161,3 +169,23 @@ LOGIN_REDIRECT_URL = "/home"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
+
+
+# For InMemory channels
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
+
+# For Redis
+
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "asgi_redis.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [("redis-host-url", 6379)],
+#         },
+#     },
+# }
