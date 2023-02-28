@@ -28,7 +28,7 @@ urlpatterns = [
     # Adding chat app urls.
     path("", include("chat.urls")),
     # To refresh the page on save.
-    path("__reload__/", include("django_browser_reload.urls")),
+    # path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 

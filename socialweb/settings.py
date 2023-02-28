@@ -26,21 +26,21 @@ SECRET_KEY = "django-insecure-n0-9omo6uqt3zdo&n(_6uk^155l+iu37^1@fa$_s17o9&*+%ld
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
     # Web server gateway interface for asynchronous web applications.
-    # "daphne",
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django_browser_reload",
+    # "django_browser_reload",
     # Crispy Forms
     "crispy_forms",
     "crispy_tailwind",
@@ -79,7 +79,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "django_browser_reload.middleware.BrowserReloadMiddleware",
+    # "django_browser_reload.middleware.BrowserReloadMiddleware",
 ]
 
 ROOT_URLCONF = "socialweb.urls"
@@ -102,7 +102,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "socialweb.wsgi.application"
 
-ASGI_APPLICATION = "socialweb.routing.application"
+ASGI_APPLICATION = "socialweb.asgi.application"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

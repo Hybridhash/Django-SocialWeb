@@ -1,0 +1,107 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Room</title>
+</head>
+<body>
+    <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+    <input id="chat-message-input" type="text" size="100"><br>
+    <input id="chat-message-submit" type="button" value="Send">
+    {{ room_name|json_script:"room-name" }}
+    <script>
+        const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+        const chatSocket = new WebSocket('ws://'+ window.location.host+ '/ws/'+roomName+ '/'
+        );
+
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            document.querySelector('#chat-log').value += (data.message + '\n');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#chat-message-input').focus();
+        document.querySelector('#chat-message-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#chat-message-submit').click();
+            }
+        };
+
+        document.querySelector('#chat-message-submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#chat-message-input');
+            const message = messageInputDom.value;
+            chatSocket.send(JSON.stringify({
+                'message': message
+            }));
+            messageInputDom.value = '';
+        };
+    </script>
+</body>
+</html> -->
+
+{% include "socialapp/base_auth.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Chat Space
+{% endblock title %}
+
+
+{% block main %}
+<div class="p-4 sm:ml-64">    
+    <div class="flex flex-col min-h-screen items-center ">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                {% if message.tags == "warning" %}
+                <div class="flex p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                </div>
+                {% else %}
+                <div class="flex p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+    
+
+    <h1 class="text-gray-900 dark:text-white">Welcome <b class="italic">{{request.user}}</b> to Chat Home</h1>
+
+    <!-- What chat room would you like to enter?<br>
+    <input id="room-name-input" type="text" size="100"><br>
+    <input id="room-name-submit" type="button" value="Enter">
+
+    <script>
+        document.querySelector('#room-name-input').focus();
+        document.querySelector('#room-name-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#room-name-submit').click();
+            }
+        };
+
+        document.querySelector('#room-name-submit').onclick = function(e) {
+            var roomName = document.querySelector('#room-name-input').value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+    </script> -->
+
+        <h2>{{ name }}</h2>
+        <p>Room Code: {{ slug }}</p>
+        <div hx-ws="connect:/chat/{{ slug }}/">
+            <form hx-ws="send:submit">
+                <input name="message">
+                <input type="submit">
+            </form>  
+         </div>
+         <div id='messages'></div>
+
+    </div>
+</div>
+{% endblock main %}

@@ -1,0 +1,35 @@
+{% include "socialapp/base_auth.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Chat Home
+{% endblock title %}
+
+
+{% block main %}
+<div class="p-4 sm:ml-64">    
+    <div class="flex flex-col min-h-screen items-center ">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                {% if message.tags == "warning" %}
+                <div class="flex p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                </div>
+                {% else %}
+                <div class="flex p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+<form method='post' action="{% url 'room-join' %}">
+    {% csrf_token %}
+    <input name='room_name' id='room_name' required="true" placeholder='Room Code'>
+    <input type='submit' id="submit">
+</form>
+    </div>
+</div>
+{% endblock main %}
