@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.shortcuts import get_object_or_404
 from .models import ChatSpace, ChatMessage
 import random
+import logging
 import string
 from django.contrib.auth.decorators import login_required
 
@@ -31,7 +32,9 @@ class ChatRoom(TemplateView):
         context["name"] = get_object_or_404(ChatSpace, slug=slug).name
         context["slug"] = self.kwargs["slug"]
 
-        space_messages = ChatMessage.objects.filter()
+        context["chat_messages"] = ChatMessage.objects.filter(
+            space=get_object_or_404(ChatSpace, slug=slug)
+        )
         return context
 
 
