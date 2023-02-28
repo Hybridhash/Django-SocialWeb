@@ -48,7 +48,7 @@
     </script> -->
 
         <div class = "pt-5" hx-ext="ws">
-            <a class="py-1 px-7 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg" href="{% url 'room-join' %}">Join Room</a>
+            <a class="py-1 px-7 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg" href="{% url 'space_join' %}">Join Space</a>
             <a class="w-600 bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-2 rounded-lg" href="{% url 'room-create' %}">Create Room</a>
         </div>
 
@@ -70,10 +70,10 @@
                                     {{friend.from_user}}
                                 </a> -->
                   
-                            <form action="{% url 'room-join' %}" method="POST">
+                            <form action="{% url 'space_join' %}" method="POST">
                                 {% csrf_token %}
-                                <input type="hidden" name="room_name" value="{{ room.slug }}">
-                                <button class="w-30 py-1 px-7 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg"  onclick="return confirm('Are you sure you want to join this room?')">Join</button>
+                                <input type="hidden" name="space_name" value="{{ room.slug }}">
+                                <button class="w-30 py-1 px-7 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg"  onclick="return confirm('Are you sure you want to join this space?')">Join</button>
                             </form>
                     </li>
                 {% endfor %}

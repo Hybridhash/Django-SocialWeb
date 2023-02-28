@@ -10,5 +10,5 @@ urlpatterns = [
     #     path("chat/space_join", views.SpaceJoinView.as_view(), name="space_join"),
     path("chat/room/<str:slug>/", views.ChatRoom.as_view(), name="chat"),
     path("create/", views.RoomCreate.as_view(), name="room-create"),
-    path("join/", views.RoomJoin.as_view(), name="room-join"),
+    path("join/", views.paceJoin.as_view(), name="space_join"),
 ]

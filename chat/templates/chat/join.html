@@ -25,9 +25,9 @@
             {% endfor %}
         </ul>
         {% endif %}
-<form method='post' action="{% url 'room-join' %}">
+<form method='post' action="{% url 'space_join' %}">
     {% csrf_token %}
-    <input name='room_name' id='room_name' required="true" placeholder='Room Code'>
+    <input name='space_name' id='space_name' required="true" placeholder='Space Code'>
     <input type='submit' id="submit">
 </form>
     </div>

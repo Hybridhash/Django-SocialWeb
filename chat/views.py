@@ -106,7 +106,7 @@ class RoomCreate(TemplateView):
     #     return render(request, "chat/create.html")
 
 
-class RoomJoin(TemplateView):
+class SpaceJoin(TemplateView):
 
     template_name = "chat/join.html"
 
@@ -115,7 +115,7 @@ class RoomJoin(TemplateView):
     #     return context
 
     def post(self, request, *args, **kwargs):
-        space_slug = request.POST["room_name"]
+        space_slug = request.POST["space_name"]
         space = ChatSpace.objects.get(slug=space_slug)
         return redirect(reverse("chat", kwargs={"slug": space.slug}))
 
