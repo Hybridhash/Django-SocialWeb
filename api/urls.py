@@ -8,5 +8,4 @@ urlpatterns = [
     path("api/create_profile/", api.CreateProfile.as_view(), name="create_profile_api"),
     path("api/read_profile/<str:user__username>/", api.ReadProfile.as_view(), name="read_profile_api"),
     path("api/user_posts/<str:user__username>/", api.UserPosts.as_view(), name="user_posts_api"),
-    # path('friends/<str:user__username>/', api.UserFriendsDetails.as_view(), name='friends_api'),
 ]

@@ -2,6 +2,8 @@ from .serializers import *
 from rest_framework import generics
 from socialapp.models import Profile
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
+import logging
 
 
 class UserList(generics.ListAPIView):
