@@ -27,6 +27,8 @@ urlpatterns = [
     path("", include("friends.urls")),
     # Adding chat app urls.
     path("", include("chat.urls")),
+    # Adding Api app urls.
+    path("", include("api.urls")),
     # To refresh the page on save.
     # path("__reload__/", include("django_browser_reload.urls")),
 ]

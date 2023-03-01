@@ -60,6 +60,8 @@ INSTALLED_APPS = [
     "django_truncate",
     # for Chat app
     "channels",
+    # for Apis
+    "api",
 ]
 
 REST_FRAMEWORK = {
