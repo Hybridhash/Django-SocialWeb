@@ -52,7 +52,7 @@
                 </div>
 
                 <!-- Backend Connected Login Form [Crispy Form] -->
-                <form hx-post = "{% url 'login' %}" hx-target="#login-section" hx-push-url="true" hx-swap="innerHTML" id="login-form"  method="POST" class="bg-zinc-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <form hx-post = "{% url 'login' %}" hx-target="#login-section" hx-push-url="true" hx-swap="outerHTML" id="login-form"  method="POST" class="bg-zinc-100 shadow-md rounded px-8 pt-6 pb-8 mb-4">
                     <!-- CSRF Protection and Crispy Form tags -->
                     {% csrf_token %}
                     {{ login_form|crispy }}
@@ -70,7 +70,7 @@
                     >
                   </p>
                 </div>
-              </form>
+              <!-- </form> -->
             </div>
           </div>
         </div>

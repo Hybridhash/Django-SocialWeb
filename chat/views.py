@@ -13,6 +13,9 @@ from django.contrib.auth.decorators import login_required
 
 
 class ChatHome(TemplateView):
+    """
+    Template Class View:  Display chat home with available Rooms/Space
+    """
 
     template_name = "chat/chat_home.html"
 
@@ -24,6 +27,12 @@ class ChatHome(TemplateView):
 
 
 class ChatRoom(TemplateView):
+    """
+    Template Class View: Chat Rooms with the heading and slug name
+                         Existing messages are shows here
+                         HTMX user for the interaction between users
+    """
+
     template_name = "chat/room.html"
 
     def get_context_data(self, **kwargs):
@@ -32,13 +41,14 @@ class ChatRoom(TemplateView):
         context["name"] = get_object_or_404(ChatSpace, slug=slug).name
         context["slug"] = self.kwargs["slug"]
 
-        context["chat_messages"] = ChatMessage.objects.filter(
-            space=get_object_or_404(ChatSpace, slug=slug)
-        )
+        context["chat_messages"] = ChatMessage.objects.filter(space=get_object_or_404(ChatSpace, slug=slug))
         return context
 
 
 class SpaceCreate(TemplateView):
+    """
+    Template Class View: Enable the user to create new space
+    """
 
     template_name = "chat/create.html"
 
@@ -57,6 +67,9 @@ class SpaceCreate(TemplateView):
 
 
 class SpaceJoin(TemplateView):
+    """
+    Template Class View: Enable the user to join existing space
+    """
 
     template_name = "chat/join.html"
 

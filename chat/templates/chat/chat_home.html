@@ -1,5 +1,4 @@
-{% include "socialapp/base_auth.html" %}
-
+{% include "socialapp/base/base_auth.html" %}
 {% load crispy_forms_tags %}
 
 {% block title %}
@@ -25,12 +24,13 @@
             {% endfor %}
         </ul>
         {% endif %}
-    <h1 class="text-gray-900 dark:text-white">Welcome <b class="italic">{{request.user}}</b> to Chat Home</h1>
+        <!-- Buttons - Create and Join Space -->
+        <h1 class="text-gray-900 dark:text-white">Welcome <b class="italic">{{request.user}}</b> to Chat Home</h1>
         <div class = "pt-5" hx-ext="ws">
             <a class="py-1 px-7 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg" href="{% url 'space_join' %}">Join Space</a>
             <a class="w-600 bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-2 rounded-lg" href="{% url 'space_create' %}">Create Space</a>
         </div>
-
+        <!-- Available Rooms - Navigation required confirmation -->
         <div class = "pt-5">
             <label for=""  class="block mb-2 font-semibold text-md font-medium text-gray-900 dark:text-white">Available Spaces</label>
             <div class="bg-white p-4 rounded-md shadow-md w-96">   

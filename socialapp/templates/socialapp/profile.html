@@ -19,19 +19,19 @@
       {% else %}
       <!-- User Profile - Content  -->  
          <!-- Image -->  
-         <img class="rounded-full w-96 h-96" src="{{ MEDIA_URL }}{{ results.image.url}}" alt="image description">
+         <img class="rounded-full w-96 h-96 object-contain" src="{{ MEDIA_URL }}{{ results.image.url}}" alt="image description">
          <!-- Username, Birth date, Country -->  
          <div class="flex flex-col  justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
             <p class="text-3xl font-bold text-gray-900 dark:text-white">Username: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.user}}</span> </p>
             <p class="text-3xl font-bold text-gray-900 dark:text-white">Birthdate: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.birthdate}}</span> </p>
             <p class="text-3xl font-bold text-gray-900 dark:text-white">Country: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.country.name}}</span> </p>
          </div>
-      {% endif %}
-      <!-- Profile Update Button -->     
-      <a href="{% url 'profile_update'%}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-         <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-         <span class="flex-1 ml-3 whitespace-nowrap">Profile Update</span>
-      </a>
+         <!-- Profile Update Button -->     
+         <a href="{% url 'profile_update'%}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            <span class="flex-1 ml-3 whitespace-nowrap">Profile Update</span>
+         </a>
+      {% endif %}  
    </div>
 </div>
 {% endblock main %}

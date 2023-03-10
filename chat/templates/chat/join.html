@@ -1,4 +1,4 @@
-{% include "socialapp/base_auth.html" %}
+{% include "socialapp/base/base_auth.html" %}
 
 {% load crispy_forms_tags %}
 
@@ -25,11 +25,12 @@
             {% endfor %}
         </ul>
         {% endif %}
-<form method='post' action="{% url 'space_join' %}">
-    {% csrf_token %}
-    <input name='space_name' id='space_name' required="true" placeholder='Space Code'>
-    <input type='submit' id="submit">
-</form>
+        <!-- Form - To join space -->
+        <form method='post' action="{% url 'space_join' %}">
+            {% csrf_token %}
+            <input name='space_name' id='space_name' required="true" placeholder='Space Code'>
+            <input type='submit' id="submit">
+        </form>
     </div>
 </div>
 {% endblock main %}

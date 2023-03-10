@@ -8,7 +8,7 @@
 
 {% block main %}
     <div class="p-4 sm:ml-64">    
-        <div class="flex flex-col min-h-screen justify-center items-center bg-violet-100">
+        <div class="flex flex-col min-h-screen justify-center items-center">
             <h1 class="text-3xl text-center font-bold text-gray-900 mb-6">Welcome <span class="text-green-900">{{request.user}}</span> to Awesome Web</h1>
              <!-- Form - Post Submission -->  
             <form method="post" enctype="multipart/form-data" action="{% url 'post_create' %}">
@@ -42,7 +42,7 @@
                     <div class="border border-blue-500 bg-white rounded-lg p-2 w-[500px] h-[200px] overflow-auto">
                         <p class="mb-3 font-light text-blue-600 dark:text-gray-400">{{ post.text }}</p>
                            {% if post.image %}
-                              <img class="h-auto max-w-md" src="{{ post.image.url }}" alt="{{ post.text }}" />
+                              <img class="h-12 mr-4 sm:h-20" src="{{ post.image.url }}" alt="{{ post.text }}" />
                            {% endif %}
                     </div>
                 </div>
