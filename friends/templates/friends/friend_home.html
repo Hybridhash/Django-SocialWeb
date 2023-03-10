@@ -1,5 +1,4 @@
-{% include "socialapp/base_auth.html" %}
-
+{% include "socialapp/base/base_auth.html" %}
 {% load crispy_forms_tags %}
 
 {% block title %}
@@ -9,6 +8,7 @@
 {% block main %}
 <div class="p-4 sm:ml-64">    
     <div class="flex flex-col min-h-screen items-center ">
+        <!-- Show Messages -->  
         {% if messages %}
         <ul class="messages">
             {% for message in messages %}
@@ -24,9 +24,10 @@
             {% endfor %}
         </ul>
         {% endif %}
-
+        
         <h1 class="text-gray-900 dark:text-white">Welcome <b class="italic">{{request.user}}</b> to Friends Home</h1>
         <div class = "pt-5">
+            <!-- Show List of Friends - Request Accepted -->
             <label for=""  class="block mb-2 font-semibold text-md font-medium text-gray-900 dark:text-white">Friends Circle</label>
             <div class="bg-white p-4 rounded-md shadow-md w-96">   
                 <ul class="divide-y divide-gray-200">
@@ -51,6 +52,7 @@
             </div>
         </div>
         <div class = "pt-5">
+            <!-- Show List of Friends - Pending Request -->
             <label for=""  class="block mb-2 font-semibold text-md font-medium text-gray-900 dark:text-white">Friend Requests Pending</label>
             <div class="bg-white p-4 rounded-md shadow-md w-96">   
                 <ul class="divide-y divide-gray-200">
@@ -69,7 +71,7 @@
                 </ul>
             </div>
         </div>
-
+        <!-- Search Friends - To Send Request -->
         <div class = "pt-5">
             <form method="GET">
                 <label for="friend-search"  class="block mb-2 font-semibold text-md font-medium text-gray-900 dark:text-white">Search Friends</label>
@@ -114,7 +116,6 @@
             {% empty %}
                 <li class="py-2 flex items-center justify-between">No users found..</li>
             {% endfor %}
-
             </ul>
         </div>
     </div>
