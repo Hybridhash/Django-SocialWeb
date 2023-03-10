@@ -135,6 +135,12 @@ class UserProfileForm(forms.ModelForm):
 
 
 class PostForm(forms.ModelForm):
+    """
+    - Form for submitting the post
+    - Validation provided to accept only images as input.
+    - HTMX for dynamic web after submitting the post
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
