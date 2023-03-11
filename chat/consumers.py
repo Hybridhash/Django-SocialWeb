@@ -39,14 +39,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 "type": "chat_message",
                 "message": message,
-                # "room": room,
                 "username": username,
             },
         )
 
     async def chat_message(self, event):
         message = event["message"]
-        # room = event["room"]
         username = event["username"]
 
         message_html = f"<div hx-swap-oob='beforeend:#messages'><p><b>{username}</b>: {message}</p></div>"
@@ -54,7 +52,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             text_data=json.dumps(
                 {
                     "message": message_html,
-                    # "room": room,
                     "username": username,
                 }
             )
