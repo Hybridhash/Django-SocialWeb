@@ -140,7 +140,8 @@ class UserProfileEdit(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.image = self.request.FILES.get("image")
+        if "image" in self.request.FILES:
+            form.instance.image = self.request.FILES.get("image")
         return super().form_valid(form)
 
 
