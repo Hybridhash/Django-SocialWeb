@@ -1,11 +1,6 @@
-
 # Social Media Application
 
 Social Media Application based on the django framework and django rest api.
-
-
-
-
 
 ## Run Locally
 
@@ -30,29 +25,32 @@ Install dependencies
 Start the server
 
 ```bash
-  poetry run python manage.py runserver 
+  poetry run python manage.py runserver
 ```
 
 Alternative procedure to run using pip
 
+## Video Link for working application
+
+[Youtube](https://www.youtube.com/watch?v=7oJNT5yFGK0)
 
 ## Instructions [Enabling Tailwind & Daisy UI]
 
 Ensure that prebuild project has already install locally with the required dependencies in a virtual envoirnment.
 
-### *Enabling Tailwind*
+### _Enabling Tailwind_
 
-- Create a new directory within your Django project, in which you'll install tailwindCSS like in any vanilla JS project setup: 
+- Create a new directory within your Django project, in which you'll install tailwindCSS like in any vanilla JS project setup:
 
 ```bash
-    mkdir jstoolchains 
+    mkdir jstoolchains
     cd jstoolchains
     npm init -y
     npm install -D tailwindcss
     npx tailwindcss init
 ```
-- Configure your template paths in tailwind.config.js that have just been created by adding below in a file. *jstoolchains/tailwind.config.js*
 
+- Configure your template paths in tailwind.config.js that have just been created by adding below in a file. _jstoolchains/tailwind.config.js_
 
 ```bash
    content: ["../**/templates/**/*.html"],
@@ -65,7 +63,8 @@ Ensure that prebuild project has already install locally with the required depen
     @tailwind components;
     @tailwind utilities;
 ```
-- In your package.json file, prepare npm scripts to ease execution of tasks (adapt the paths according to your Django static folder location): *jstoolchains\package.json* 
+
+- In your package.json file, prepare npm scripts to ease execution of tasks (adapt the paths according to your Django static folder location): _jstoolchains\package.json_
 
 ```bash
     "scripts": {
@@ -88,7 +87,7 @@ Ensure that prebuild project has already install locally with the required depen
     npm run tailwind-watch
 ```
 
-### *Enabling daisyUI*
+### _Enabling daisyUI_
 
 - Open a terminal, and run the following commands:
 
@@ -98,18 +97,19 @@ Ensure that prebuild project has already install locally with the required depen
 ```
 
 - modify your jstoolchains\tailwind.config.js
+
 ```bash
    plugins: [require("daisyui")],
 ```
 
 voilà!! :cupid:
+
 ## Tech Stack
 
 **Client:** HTMX, TailwindCSS, DaisyUI
 
 **Server:** Django, Djnago REST Framework
 
-
 ## Acknowledgements
 
- - [Guidline to install tailwind/daisy UI in Django project](https://blog.kenshuri.com/posts/001_setup_django_tailwind_daisyui.md)
+- [Guidline to install tailwind/daisy UI in Django project](https://blog.kenshuri.com/posts/001_setup_django_tailwind_daisyui.md)
