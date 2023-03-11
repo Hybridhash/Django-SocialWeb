@@ -12,7 +12,7 @@ Social Media Application based on the django framework and django rest api.
 Clone the project
 
 ```bash
-  git clone https://link-to-project
+  git clone https://github.com/Hybridhash/Django-SocialWeb.git
 ```
 
 Go to the project directory
