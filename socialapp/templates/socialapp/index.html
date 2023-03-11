@@ -1,35 +1,16 @@
 
-{% extends "./base.html" %}
-
+{% extends "./base/base_normal.html" %}
+{% load static %}
 
 {% block title %}
     Landing Page
 {% endblock title %}
 
 {% block main %}
-
-    <div class="flex flex-col min-h-screen justify-center items-center ">
-
-            <h1>Social Web Application</h1>
-   
-            <table>
-            <tr><th>Protein ID</th><th>Sequence</th></tr>
-                {% for profile in profiles  %}
-                <tr><td>{{profile.user}}</td>
-                <td>{{profile.country}}</td></tr>
-                {% endfor %} 
-            </table>
-            
-            <label class="label">
-                <span class="label-text">Username</span>
-              </label>
-            <input type="username" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
-            <label class="label">
-                <span class="label-text">Password</span>
-              </label>
-            <input type="password" placeholder="Type here" class="input input-bordered w-full max-w-xs" />
-            <div class = "pt-5">
-                <button class="btn">Submit</button>
-            </div>
+    <div class="flex flex-col h-screen justify-center items-center bg-gray-200">
+            <img class="h-auto max-w-full" src="/media/assets/social_thinking.svg"alt="Social Thinking">
+            <h1 class="text-3xl text-center font-bold text-gray-900 mb-6">Welcome to Awesome Social Web</h1>
+            <!-- Navigation to login page -->  
+            <a href="{% url 'login' %}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Get Started</a>
     </div>
 {% endblock main %}
