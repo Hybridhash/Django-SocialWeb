@@ -1,24 +1,23 @@
-{% extends "./base_auth.html" %}
-
+{% extends "./base/base_auth.html" %}
 {% load crispy_forms_tags %}
-
-
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% block title %}
     Post Update
 {% endblock title %}
 
 {% block main %}
+  <!-- Form - Delete User Post [HTMX Controlled] -->  
   <form  hx-target="this" hx-swap="outerHTML" method="post" action="{% url 'post_delete' pk=post.pk %}">
     {% csrf_token %}
+      <!-- User Confirmation -->  
       <p>Are you sure you want to delete?</p>
-      <div class="border rounded-lg p-2 w-[500px] h-[200px] overflow-auto mt-2 mb-2">
+      <div class="border border-blue-500 rounded-lg p-2 w-[500px] h-[200px] overflow-auto mt-2 mb-2">
         <p class="mb-3 font-light text-blue-600 dark:text-gray-400">{{ object.text }}</p>
       </div>
       <button  type="submit" value="Confirm" class=" text-white bg-gradient-to-r to-emerald-600 from-sky-400 border border-white rounded-lg font-medium text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none hover:shadow-lg">Confirm</button>
     </form>
     <button onclick="window.location.href='{% url 'home' %}'" class="text-white bg-gradient-to-r from-red-500 to-red-600 border border-white rounded-lg font-medium text-sm px-5 py-2.5 mr-2 mb-2 focus:outline-none hover:shadow-lg">Cancel</button>
+  <!-- Box Styling -->
   <style>
     .border {
       border-width: 2px;
@@ -28,6 +27,5 @@
       overflow: auto;
       word-break: break-word;
     }
-</style>
-
+  </style>
 {% endblock main %}
