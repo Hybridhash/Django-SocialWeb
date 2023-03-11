@@ -4,18 +4,20 @@ from django.views.generic import ListView
 from django.db.models import Q, OuterRef, Subquery
 from socialapp.models import User
 from django.views.generic.base import TemplateView
-from django.views.generic.edit import UpdateView, CreateView, DeleteView
+from django.views.generic.edit import CreateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import FriendRequest
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views import View
-from django.db.models import Case, When, BooleanField
+
 
 # Create your views here.
+class FriendHome(LoginRequiredMixin, TemplateView):
+    """
+    Template Class View:  To show friends, friends request and search on home page
+    """
 
-
-class FriendHome(TemplateView):
     template_name = "friends/friend_home.html"
 
     def get_context_data(self, **kwargs):
@@ -24,9 +26,7 @@ class FriendHome(TemplateView):
         context["friend_list"] = friend_list.context_data["object_list"]
 
         # Get the list of requests received
-        friend_requests_received = FriendRequest.objects.filter(
-            to_user=self.request.user, accepted=False
-        )
+        friend_requests_received = FriendRequest.objects.filter(to_user=self.request.user, accepted=False)
 
         # Get the list of friends where request is accepted
         friends_circle = FriendRequest.objects.filter(
@@ -40,7 +40,11 @@ class FriendHome(TemplateView):
         return context
 
 
-class FriendSearch(ListView):
+class FriendSearch(LoginRequiredMixin, ListView):
+    """
+    List Class View:  To show friends available on submitting the search query
+    """
+
     model = User
     template_name = "friends/friend_home.html"
 
@@ -63,16 +67,8 @@ class FriendSearch(ListView):
             ).values("from_user")
 
             queryset = queryset.annotate(
-                is_friend=Subquery(
-                    friend_requests_sent.filter(
-                        to_user=OuterRef("pk"), accepted=1
-                    ).values("id")[:1]
-                ),
-                is_pending=Subquery(
-                    friend_requests_sent.filter(
-                        to_user=OuterRef("pk"), accepted=0
-                    ).values("id")[:1]
-                ),
+                is_friend=Subquery(friend_requests_sent.filter(to_user=OuterRef("pk"), accepted=1).values("id")[:1]),
+                is_pending=Subquery(friend_requests_sent.filter(to_user=OuterRef("pk"), accepted=0).values("id")[:1]),
             )
 
         else:
@@ -82,6 +78,11 @@ class FriendSearch(ListView):
 
 
 class FriendCreate(LoginRequiredMixin, CreateView):
+    """
+    Create Class View:  To create new friends request on submitting the request button
+                        It displays message in case if there is already pending request
+    """
+
     model = FriendRequest
     fields = []
     success_url = reverse_lazy("friends")
@@ -91,8 +92,7 @@ class FriendCreate(LoginRequiredMixin, CreateView):
         to_user = get_object_or_404(User, pk=self.kwargs["pk"])
         if from_user != to_user:
             if FriendRequest.objects.filter(
-                Q(from_user=from_user, to_user=to_user)
-                | Q(from_user=to_user, to_user=from_user)
+                Q(from_user=from_user, to_user=to_user) | Q(from_user=to_user, to_user=from_user)
             ).exists():
                 messages.warning(
                     self.request,
@@ -103,33 +103,16 @@ class FriendCreate(LoginRequiredMixin, CreateView):
                 friend_request.from_user = from_user
                 friend_request.to_user = to_user
                 friend_request.save()
-                messages.success(
-                    self.request, "Friend request sent to {}".format(to_user.username)
-                )
+                messages.success(self.request, "Friend request sent to {}".format(to_user.username))
         return redirect(reverse_lazy("friends"))
 
 
 class FriendAccept(View):
-    # model = FriendRequest
-    # fields = ["accepted"]
-    # success_url = reverse_lazy("friends")
+    """
+    Class View: Show friends request and button to accept it
+    """
 
-    # def form_valid(self, form):
-    #     form.is_valid()
-    #     friend_request = get_object_or_404(FriendRequest, pk=self.kwargs["pk"])
-    #     logging.debug(friend_request)
-    #     friend_request.accepted = True
-    #     friend_request.save()
-    #     logging.debug(friend_request.save())
-    #     return super().form_valid(form)
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     friend_request = get_object_or_404(FriendRequest, pk=self.kwargs["pk"])
-    #     context["friend_request"] = friend_request
-    #     return context
     template_name = "friends/friend_home.html"
-
-    # success_url = reverse_lazy("friends")
 
     def post(self, request, *args, **kwargs):
         friend_request = get_object_or_404(FriendRequest, pk=self.kwargs["pk"])
@@ -140,6 +123,10 @@ class FriendAccept(View):
 
 
 class FriendDelete(LoginRequiredMixin, View):
+    """
+    Class View: to delete the friends
+    """
+
     template_name = "friends/friend_home.html"
 
     def post(self, request, *args, **kwargs):

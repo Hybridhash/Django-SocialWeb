@@ -9,9 +9,9 @@ import datetime
 
 
 class UserSignupForm(forms.ModelForm):
-
     """
-    Form to register a new user in the data base
+    - Form to register a new user in the data base
+    - HTMX for dynamic navigation from login to user home page without loading page
     """
 
     def __init__(self, *args, **kwargs):
@@ -31,45 +31,29 @@ class UserSignupForm(forms.ModelForm):
             Submit(
                 "submit",
                 "Submit",
+                # Tailwind CSS class reference for button
                 css_class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded",
             )
         )
 
+    # Two password fields created to match it with each other before pushing to backend
     password1 = forms.CharField(
         label="Password",
         widget=forms.PasswordInput(
-            attrs={
-                "class": "form-control",
-                "autocomplete": "off",
-                "placeholder": "Enter the password",
-            }
+            attrs={"class": "form-control", "autocomplete": "off", "placeholder": "Enter the password"}
         ),
     )
+
     password2 = forms.CharField(
         label="Repeat Password",
         widget=forms.PasswordInput(
-            attrs={
-                "class": "form-control",
-                "autocomplete": "off",
-                "placeholder": "Enter the password",
-            }
+            attrs={"class": "form-control", "autocomplete": "off", "placeholder": "Enter the password"}
         ),
     )
 
     class Meta:
         model = User
         fields = ["first_name", "last_name", "username", "password1", "password2"]
-        # labels = {
-
-        # }
-        # widgets = {
-        #     "first_name": forms.TextInput(
-        #         max_length=255,
-        #         widget=forms.TextInput(
-        #             attrs={"class": "form-control", "placeholder": "Enter first name"}
-        #         ),
-        #     ),
-        # }
 
     """
     Function to validate username before saving to database    
@@ -104,8 +88,14 @@ class UserSignupForm(forms.ModelForm):
 
 
 class UserLoginForm(forms.Form):
+    """
+    - Form to login into the social web application.
+    - Errors are identified using the form "Validation Error" class.
+    - HTMX for dynamic navigation from login to user home page without loading page
+    """
+
     username = forms.CharField()
-    password = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput(attrs={"autocomplete": "off"}))
 
     def clean(self, *args, **kwargs):
         username = self.cleaned_data.get("username")
@@ -120,15 +110,15 @@ class UserLoginForm(forms.Form):
         return super(UserLoginForm, self).clean(*args, **kwargs)
 
 
-# class UserBaseForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ["first_name", "last_name", "email"]
-
-
 class UserProfileForm(forms.ModelForm):
+    """
+    - Form to login show user profile.
+    - Errors are identified using the form "Validation Error" class.
+    """
+
     birthdate = forms.DateField(widget=forms.TextInput(attrs={"type": "date"}))
     image = forms.ImageField()
+
     """
     Function to validate birth date is on/before today date    
     """
@@ -144,45 +134,13 @@ class UserProfileForm(forms.ModelForm):
         fields = ["country", "birthdate", "image"]
 
 
-# class UserProfileForm(forms.ModelForm):
-#     class Meta:
-#         model = Profile
-#         fields = ["country", "birthdate", "image"]
-
-#     def __init__(self, user, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.user = user
-
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         try:
-#             user = User.objects.get(user=self.user)
-#         except User.DoesNotExist:
-#             raise forms.ValidationError("User with this username does not exist.")
-#         self.instance = user
-#         return cleaned_data
-
-
-# class UserProfileCombinedForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = ["first_name", "last_name", "email"]
-
-#     def __init__(self, username, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         self.username = username
-
-#     def clean(self):
-#         cleaned_data = super().clean()
-#         try:
-#             user = User.objects.get(username=self.username)
-#         except User.DoesNotExist:
-#             raise forms.ValidationError("User with this username does not exist.")
-#         self.instance = user
-#         return cleaned_data
-
-
 class PostForm(forms.ModelForm):
+    """
+    - Form for submitting the post
+    - Validation provided to accept only images as input.
+    - HTMX for dynamic web after submitting the post
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)

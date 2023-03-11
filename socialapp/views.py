@@ -22,15 +22,17 @@ from django.http import Http404
 from .models import *
 
 
-# View for index page, returned to HTML template
 def index(request):
-    profiles = Profile.objects.all()
-    # response = "Hello" #Test Response
-    return render(request, "socialapp/index.html", {"profiles": profiles})
+    """
+    GET Request: Render the landing page
+    """
+    return render(request, "socialapp/index.html")
 
 
 def user_signup(request):
-    logging.debug(request)
+    """
+    GET/POST Request: User Signup form for new registration
+    """
     if request.method == "GET":
         context = {"form": UserSignupForm}
         return render(request, "socialapp/signup.html", context)
@@ -40,11 +42,6 @@ def user_signup(request):
         if form.is_valid():
             # To commit new user to the data base
             user = form.save()
-            # Session for user from django
-            # login(request, user)
-            # template = render(request, "socialapp/login.html")
-            # template["HX-Push"] = "/login/"
-            # return template
             return redirect("/login")
         # Validate a crispy-form through AJAX to re-render any resulting form errors
         ctx = {}
@@ -54,12 +51,13 @@ def user_signup(request):
 
 
 def user_login(request):
+    """
+    GET/POST Request: User Signup form for new registration
+    """
     logging.debug("user_login called")
-    logging.debug(request)
     if request.user.is_authenticated:
         logging.debug("user authentication called")
         return redirect("/home")
-
     else:
         next = request.GET.get("next")
         form = UserLoginForm(request.POST or None)
@@ -71,87 +69,60 @@ def user_login(request):
             if next:
                 return redirect(next)
             return redirect("/home")
-
         context = {
             "login_form": form,
         }
         return render(request, "socialapp/login.html", context)
 
 
-# @login_required(login_url="login/")
-# def homepage(request):
-#     return render(request=request, template_name="socialapp/home.html")
+@login_required(login_url="login/")
+def user_logout(request):
+    """
+    GET Request: User request to logout from the session using builtin logout function
+    """
+    logout(request)
+    return redirect("/login")
 
 
 class Home(View):
+    """
+    Class View: User main landing page showing Post form and Post List
+    """
+
     def get(self, request, *args, **kwargs):
         post_form = PostForm()
-        # post_create = PostCreate.as_view(success_url=reverse_lazy("home"))
-        # return post_create(request, *args, **kwargs)
         post_list = PostList.as_view()(request)
 
         return render(
             request=request,
             template_name="socialapp/home.html",
-            context={
-                "post_form": post_form,
-                # "post_create_view": post_create,
-                "post_list": post_list.context_data["post_list"],
-            },
+            context={"post_form": post_form, "post_list": post_list.context_data["post_list"]},
         )
 
 
 @login_required(login_url="login/")
-def user_logout(request):
-    logout(request)
-    return redirect("/login")
+def user_profile(request, username):
+    """
+    GET Request: To get the user profile while passing the username
+                 User's have keep the profile blank and create it at later stage
+    """
+    try:
+        user = User.objects.get(username=username)
+        results = get_object_or_404(Profile, user__username=user)
+        logging.debug(results)
+        return render(request, "socialapp/profile.html", {"results": results})
+    except Http404:
+        url = reverse_lazy("profile_create")
+        message = "Profile not found. Click here to create a profile:"
+        return render(request, "socialapp/profile.html", {"error_message": message})
 
 
-class UserProfileEdit(UpdateView):
-    # if request.method == "GET":
-    #     context = {
-    #         "profile_form_a": UserProfileAForm,
-    #         "profile_form_b": UserProfileBForm,
-    #     }
-    #     return render(request, "socialapp/profile.html", context)
+class UserProfileEdit(LoginRequiredMixin, UpdateView):
+    """
+    Update Class View:  View to update the user profile
+    """
 
-    # elif request.method == "POST":
-    #     form = UserProfileCombinedForm(request.POST)
-    #     if form.is_valid():
-    #         form_a = form.cleaned_data["profile_a"]
-    #         form_a.save()
-    #         form_b = form.cleaned_data["profile_b"]
-    #         form_b.save()
-    #         return redirect("success_url")
-    # user = User.objects.get(username=username)
-    # if request.method == "POST":
-    #     form = UserProfileCombinedForm(username, request.POST, instance=user)
-    #     if form.is_valid():
-    #         form.save()
-    #         # do something with the updated user
-    #         ...
-    # else:
-    #     form = UserProfileCombinedForm(username, instance=user)
-    # return render(request, "socialapp/profile.html", {"profile_form_a": form})
-    # # return render(request, "socialapp/profile.html", {"username": username})
-
-    # user = User.objects.get(username=username)
-    # if request.method == "POST":
-    #     form = UserProfileForm(username, request.POST, instance=user)
-    #     if form.is_valid():
-    #         form.save()
-    #         # do something with the updated user
-    #         ...
-    # else:
-    #     form = UserProfileForm(username, instance=user)
-    # return render(request, "socialapp/profile.html", {"profile_form_a": form})
-
-    # model1 = Profile
-    # fields = ["country", "birthdate", "image"]
     form_class = UserProfileForm
-    # model2 = User
-    # form_class = UserBaseForm
-
     template_name = "socialapp/profile_update.html"
     success_url = reverse_lazy("home")
 
@@ -173,20 +144,12 @@ class UserProfileEdit(UpdateView):
         return super().form_valid(form)
 
 
-@login_required(login_url="login/")
-def user_profile(request, username):
-    try:
-        user = User.objects.get(username=username)
-        results = get_object_or_404(Profile, user__username=user)
-        logging.debug(results)
-        return render(request, "socialapp/profile.html", {"results": results})
-    except Http404:
-        url = reverse_lazy("profile_create")
-        message = "Profile not found. Click here to create a profile:"
-        return render(request, "socialapp/profile.html", {"error_message": message})
-
-
 class UserProfileCreate(LoginRequiredMixin, CreateView):
+    """
+    Create Class View:  Enable the user to create a new profile after registration
+                        User's have keep the profile blank and create it at later stage
+    """
+
     form_class = UserProfileForm
     template_name = "socialapp/profile_create.html"
     success_url = reverse_lazy("home")
@@ -200,8 +163,11 @@ class UserProfileCreate(LoginRequiredMixin, CreateView):
 
 
 class PostCreate(LoginRequiredMixin, CreateView):
+    """
+    Create Class View: Enables the user to create new post
+    """
+
     form_class = PostForm
-    # template_name = "socialapp/post_create.html"
     success_url = reverse_lazy("home")
 
     def form_valid(self, form):
@@ -212,7 +178,10 @@ class PostCreate(LoginRequiredMixin, CreateView):
     logging.debug(form_valid)
 
 
-class PostList(ListView):
+class PostList(LoginRequiredMixin, ListView):
+    """
+    List Class View: List the post submitted by user
+    """
 
     model = Post
 
@@ -228,18 +197,19 @@ class PostList(ListView):
         return context
 
 
-class PostUpdate(UpdateView):
+class PostUpdate(LoginRequiredMixin, UpdateView):
+    """
+    Update Class View: Update the user posts from the database
+    """
+
     model = Post
     form_class = PostForm
-
     template_name = "socialapp/post_update.html"
     success_url = reverse_lazy("home")
 
     def get_queryset(self):
         qs = super().get_queryset()
         user = User.objects.get(username=self.request.user.username)
-        # logging.debug(get_object_or_404(Profile, user=user))
-        # profile = get_object_or_404(Profile, user=user)
         return qs.filter(owner=user, id=self.kwargs["pk"])
 
     def get_context_data(self, **kwargs):
@@ -254,10 +224,12 @@ class PostUpdate(UpdateView):
         return super().form_valid(form)
 
 
-class PostDelete(DeleteView):
-    model = Post
-    # form_class = PostForm
+class PostDelete(LoginRequiredMixin, DeleteView):
+    """
+    Delete Class View: Delete the user posts from the data base
+    """
 
+    model = Post
     template_name = "socialapp/post_delete.html"
     success_url = reverse_lazy("home")
 

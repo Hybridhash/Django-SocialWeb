@@ -1,0 +1,54 @@
+{% include "socialapp/base/base_auth.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    Chat Home
+{% endblock title %}
+
+
+{% block main %}
+<div class="p-4 sm:ml-64">    
+    <div class="flex flex-col min-h-screen items-center ">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                {% if message.tags == "warning" %}
+                <div class="flex p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 dark:border-red-800" role="alert">
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                </div>
+                {% else %}
+                <div class="flex p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400 dark:border-blue-800" role="alert">
+                    <li class="{{ message.tags }}">{{ message }}</li>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <!-- Buttons - Create and Join Space -->
+        <h1 class="text-gray-900 dark:text-white">Welcome <b class="italic">{{request.user}}</b> to Chat Home</h1>
+        <div class = "pt-5" hx-ext="ws">
+            <a class="py-1 px-7 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg" href="{% url 'space_join' %}">Join Space</a>
+            <a class="w-600 bg-blue-500 hover:bg-blue-600 text-white font-medium py-1 px-2 rounded-lg" href="{% url 'space_create' %}">Create Space</a>
+        </div>
+        <!-- Available Rooms - Navigation required confirmation -->
+        <div class = "pt-5">
+            <label for=""  class="block mb-2 font-semibold text-md font-medium text-gray-900 dark:text-white">Available Spaces</label>
+            <div class="bg-white p-4 rounded-md shadow-md w-96">   
+                <ul class="divide-y divide-gray-200">
+                {% for room in rooms %}
+                    <li class="py-2 flex items-center justify-between">
+                                <p class="text-violet-700 font-semibold capitalize">{{room.name}}</p>
+                                <p >{{room.slug}}</p>
+                            <form action="{% url 'space_join' %}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="space_name" value="{{ room.slug }}">
+                                <button class="w-30 py-1 px-7 bg-green-600 hover:bg-green-800 text-white font-medium py-1 px-2 rounded-lg"  onclick="return confirm('Are you sure you want to join this space?')">Join</button>
+                            </form>
+                    </li>
+                {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock main %}

@@ -5,9 +5,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=devide-width, initial-scale=1.0" />
+    <!-- FlowBite CDN - Tailwind base component  -->  
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.css" rel="stylesheet" />
-
+    <!-- Tailwind CDN - CSS Classes  -->  
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- HTMX CDN -->
     <script src="https://unpkg.com/htmx.org@1.6.1"></script>
     <title>
         {% block title %}
@@ -15,23 +17,23 @@
     </title>
   </head>
   <body > 
+    <!-- Navigation Side Bar - Available for Authenticated Users -->
     <nav>
-      {% include "./partials/sidebar.html" %} 
+      {% include "../partials/sidebar.html" %} 
     </nav>
-    <main>
-            
+     <!-- Block Main   -->
+    <main> 
         {%  block main %}
         {%  endblock main %}
     </main>
 
+    <!-- CSRF Protection using HTMX -->  
     <script>
       document.body.addEventListener('htmx:configRequest', (event) => {
           event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
       })
     </script>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
-
-
+    <!-- AJAX Library for Flow bite components -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.3/flowbite.min.js"></script>
   </body>
 </html>

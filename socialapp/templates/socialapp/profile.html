@@ -1,120 +1,37 @@
-{% extends "./base_auth.html" %}
-
+{% extends "./base/base_auth.html" %}
 {% load crispy_forms_tags %}
-
-
-{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
 {% block title %}
     User Profile
 {% endblock title %}
 
-
 {% block main %}
-
-
-<!-- <div class="profile-view" data-user="{{username.username}}">
-    <form method="post">
-        {% csrf_token %}
-                    
-        {{ profile_form_a|crispy }}
-        {{ profile_form_b|crispy }}
-    </form>
-</div> -->
-<!-- 
- <div class="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700">
-           <div class="grid grid-cols-3 gap-4 mb-4">
-              <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">A</p>
-              </div>
-              <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">B</p>
-              </div>
-              <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">C</p>
-              </div>
-           </div>
-           <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-              <p class="text-2xl text-gray-400 dark:text-gray-500">+D</p>
-           </div>
-           <div class="grid grid-cols-2 gap-4 mb-4">
-              <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">+E</p>
-              </div>
-              <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">+F</p>
-              </div>
-              <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">+G</p>
-              </div>
-              <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">+H</p>
-              </div>
-           </div>
-           <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-              <p class="text-2xl text-gray-400 dark:text-gray-500">+I</p>
-           </div>
-           <div class="grid grid-cols-2 gap-4">
-              <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">+J</p>
-              </div>
-              <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">+K</p>
-              </div>
-              <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">+L</p>
-              </div>
-              <div class="flex items-center justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-                 <p class="text-2xl text-gray-400 dark:text-gray-500">+M</p>
-              </div>
-           </div>
-        </div>
-     </div>
-
-     <div class="p-4 sm:ml-64">
-        <div class="p-4 border-2 border-gray-200 border-dashed rounded-lg dark:border-gray-700"> -->
-
-<div class="flex flex-col min-h-screen pt-6 items-center bg-zinc-100">
-    <!-- {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %} -->
-
-    {% if error_message %}
-
-    <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-        {{ error_message|safe }}
-    </div>
-    <a href="{% url 'profile_create'%}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-        <span class="flex-1 ml-3 whitespace-nowrap">Create Profile</span>
-     </a>
-    
-    {% else %}
-    <!-- Content here -->
-    {{ profile_form_a|crispy }}
-    {{username}}
-    
-    <img class="rounded-full w-96 h-96" src="{{ MEDIA_URL }}{{ results.image.url}}" alt="image description">
-
-    <div class="flex flex-col  justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
-    
-    <p class="text-3xl font-bold text-gray-900 dark:text-white">Username: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.user}}</span> </p>
-    <p class="text-3xl font-bold text-gray-900 dark:text-white">Birthdate: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.birthdate}}</span> </p>
-    <p class="text-3xl font-bold text-gray-900 dark:text-white">Country: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.country.name}}</span> </p>
-       
-
-    {% endif %}
-
-    </div>
-    
-    
-    <a href="{% url 'profile_update'%}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
-        <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-        <span class="flex-1 ml-3 whitespace-nowrap">Profile Update</span>
-     </a>
-
+<div class="p-4 sm:ml-64"> 
+   <div class="flex flex-col min-h-screen pt-6 items-center bg-zinc-100">
+      {% if error_message %}
+         <div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+            {{ error_message|safe }}
+         </div>
+         <a href="{% url 'profile_create'%}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            <span class="flex-1 ml-3 whitespace-nowrap">Create Profile</span>
+         </a>
+      {% else %}
+      <!-- User Profile - Content  -->  
+         <!-- Image -->  
+         <img class="rounded-full w-96 h-96 object-contain" src="{{ MEDIA_URL }}{{ results.image.url}}" alt="image description">
+         <!-- Username, Birth date, Country -->  
+         <div class="flex flex-col  justify-center rounded bg-gray-50 h-28 dark:bg-gray-800">
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">Username: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.user}}</span> </p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">Birthdate: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.birthdate}}</span> </p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">Country: <span class="text-3xl  font-medium text-gray-900 dark:text-white">{{results.country.name}}</span> </p>
+         </div>
+         <!-- Profile Update Button -->     
+         <a href="{% url 'profile_update'%}" class="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700">
+            <svg aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
+            <span class="flex-1 ml-3 whitespace-nowrap">Profile Update</span>
+         </a>
+      {% endif %}  
+   </div>
 </div>
-
-</div>
-</div>
-
 {% endblock main %}
