@@ -1,13 +1,10 @@
-from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.shortcuts import redirect, render, reverse
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404
 from .models import ChatSpace, ChatMessage
 import random
-import logging
 import string
-from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
