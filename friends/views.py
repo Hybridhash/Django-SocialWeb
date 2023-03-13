@@ -1,5 +1,5 @@
 import logging
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.views.generic import ListView
 from django.db.models import Q, OuterRef, Subquery
 from socialapp.models import User
@@ -61,10 +61,6 @@ class FriendSearch(LoginRequiredMixin, ListView):
             friend_requests_sent = FriendRequest.objects.filter(
                 from_user=self.request.user, to_user__in=queryset
             ).values("to_user")
-
-            friend_requests_received = FriendRequest.objects.filter(
-                from_user__in=queryset, to_user=self.request.user
-            ).values("from_user")
 
             queryset = queryset.annotate(
                 is_friend=Subquery(friend_requests_sent.filter(to_user=OuterRef("pk"), accepted=1).values("id")[:1]),
