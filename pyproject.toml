@@ -24,6 +24,7 @@ daphne = "4.0.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^22.12.0"
+flake8 = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core"]
