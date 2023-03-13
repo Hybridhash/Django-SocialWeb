@@ -14,13 +14,13 @@ class UserAdmin(admin.ModelAdmin):
     # Only display the "username" field
 
     fields = ["username"]
-    
 
-#Un registering the existing user model from the admin panel
+
+# Unregistering the existing user model from the admin panel
 admin.site.unregister(User)
 
 # Registered the user model again passing the custom admin class just created.
 admin.site.register(User, UserAdmin)
 
-#Registering the profile model created for users
+# Registering the profile model created for users
 admin.site.register(Profile)

@@ -12,14 +12,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # This will let us get the HTML fragments from the back end
 from crispy_forms.utils import render_crispy_form
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
 import logging
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 
 # Taking all the models from application
-from .models import *
+from .models import Post, Profile, User
 
 
 def index(request):
@@ -129,7 +128,6 @@ class UserProfileEdit(LoginRequiredMixin, UpdateView):
     def get_object(self, queryset=None):
         user = User.objects.get(username=self.request.user.username)
         # logging.debug(get_object_or_404(Profile, user=user))
-        profile = get_object_or_404(Profile, user=user)
         return Profile.objects.get(user=user)
 
     def get_context_data(self, **kwargs):
@@ -221,7 +219,8 @@ class PostUpdate(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        form.instance.image = self.request.FILES.get("image")
+        if "image" in self.request.FILES:
+            form.instance.image = self.request.FILES.get("image")
         return super().form_valid(form)
 
 

@@ -56,7 +56,7 @@ class UserSignupForm(forms.ModelForm):
         fields = ["first_name", "last_name", "username", "password1", "password2"]
 
     """
-    Function to validate username before saving to database    
+    Function to validate username before saving to database
     """
 
     def clean_username(self):
@@ -74,7 +74,7 @@ class UserSignupForm(forms.ModelForm):
         return password2
 
     """
-    Function to hash password before saving to database    
+    Function to hash password before saving to database
     """
 
     def save(self, commit=True):
@@ -120,7 +120,7 @@ class UserProfileForm(forms.ModelForm):
     image = forms.ImageField()
 
     """
-    Function to validate birth date is on/before today date    
+    Function to validate birth date is on/before today date
     """
 
     def clean_birthdate(self):
